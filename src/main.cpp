@@ -4,6 +4,7 @@
 
 #include "lexer/lexer.h"
 #include "parser/parser.h"
+#include "interpreter/interpreter.h"
 
 int main(int argc, char** argv) {
     if (argc < 2) {
@@ -26,8 +27,8 @@ int main(int argc, char** argv) {
     Parser parser(tokens);
     auto program = parser.parse();
 
-    std::cout << "Parsed " << program->statements.size()
-              << " statement(s) successfully ✅\n";
+    Interpreter interpreter;
+    interpreter.interpret(*program);
 
     return 0;
 }
