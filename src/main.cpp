@@ -1,7 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
 #include "lexer/lexer.h"
+#include "parser/parser.h"
 
 int main(int argc, char** argv) {
     if (argc < 2) {
@@ -21,21 +23,11 @@ int main(int argc, char** argv) {
     Lexer lexer(buffer.str());
     auto tokens = lexer.tokenize();
 
-    for (const auto& token : tokens) {
-        switch (token.type) {
-            case TokenType::PRINT:
-                std::cout << "PRINT\n";
-                break;
-            case TokenType::STRING:
-                std::cout << "STRING(\"" << token.lexeme << "\")\n";
-                break;
-            case TokenType::EOF_TOKEN:
-                std::cout << "EOF\n";
-                break;
-            default:
-                std::cout << "UNKNOWN(" << token.lexeme << ")\n";
-        }
-    }
+    Parser parser(tokens);
+    auto program = parser.parse();
+
+    std::cout << "Parsed " << program->statements.size()
+              << " statement(s) successfully ✅\n";
 
     return 0;
 }
