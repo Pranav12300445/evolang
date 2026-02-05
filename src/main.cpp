@@ -1,6 +1,6 @@
-#include <iostream>
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 #include "lexer/lexer.h"
 #include "parser/parser.h"
@@ -13,22 +13,14 @@ int main(int argc, char** argv) {
     }
 
     std::ifstream file(argv[1]);
-    if (!file) {
-        std::cerr << "Could not open file\n";
-        return 1;
-    }
-
     std::stringstream buffer;
     buffer << file.rdbuf();
 
     Lexer lexer(buffer.str());
-    auto tokens = lexer.tokenize();
-
-    Parser parser(tokens);
+    Parser parser(lexer.tokenize());
     auto program = parser.parse();
 
     Interpreter interpreter;
     interpreter.interpret(*program);
-
     return 0;
 }

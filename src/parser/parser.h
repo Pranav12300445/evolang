@@ -1,13 +1,12 @@
 #pragma once
-#include <vector>
 #include <memory>
+#include <vector>
 #include "lexer/lexer.h"
 #include "ast/ast.h"
 
 class Parser {
 public:
     explicit Parser(const std::vector<Token>& tokens);
-
     std::unique_ptr<Program> parse();
 
 private:
@@ -20,4 +19,6 @@ private:
 
     std::unique_ptr<Stmt> parseStatement();
     std::unique_ptr<Stmt> parsePrintStatement();
+    std::unique_ptr<Stmt> parseLetStatement();
+    std::unique_ptr<Expr> parseExpression();
 };

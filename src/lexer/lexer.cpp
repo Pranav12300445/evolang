@@ -18,15 +18,14 @@ void Lexer::skipWhitespace() {
 }
 
 Token Lexer::readString() {
-    advance(); // skip opening quote
+    advance(); // opening quote
     std::string value;
 
     while (peek() != '"' && peek() != '\0') {
         value += advance();
     }
 
-    if (peek() == '"') advance(); // closing quote
-
+    if (peek() == '"') advance();
     return {TokenType::STRING, value};
 }
 
@@ -36,11 +35,10 @@ Token Lexer::readIdentifier() {
         value += advance();
     }
 
-    if (value == "print") {
-        return {TokenType::PRINT, value};
-    }
+    if (value == "print") return {TokenType::PRINT, value};
+    if (value == "let")   return {TokenType::LET, value};
 
-    return {TokenType::UNKNOWN, value};
+    return {TokenType::IDENTIFIER, value};
 }
 
 std::vector<Token> Lexer::tokenize() {
@@ -48,8 +46,8 @@ std::vector<Token> Lexer::tokenize() {
 
     while (peek() != '\0') {
         skipWhitespace();
-
         char c = peek();
+
         if (c == '\0') break;
 
         if (c == '"') {
@@ -58,9 +56,12 @@ std::vector<Token> Lexer::tokenize() {
         else if (std::isalpha(c)) {
             tokens.push_back(readIdentifier());
         }
-        else {
+        else if (c == '=') {
             advance();
-            tokens.push_back({TokenType::UNKNOWN, std::string(1, c)});
+            tokens.push_back({TokenType::EQUAL, "="});
+        }
+        else {
+            tokens.push_back({TokenType::UNKNOWN, std::string(1, advance())});
         }
     }
 

@@ -1,1 +1,2 @@
-print "Hello Evolang"
+let message = "Hello Evolang"
+print message

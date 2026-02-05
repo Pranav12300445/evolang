@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 
-// ===== Base Nodes =====
 struct ASTNode {
     virtual ~ASTNode() = default;
 };
@@ -13,7 +12,12 @@ struct Expr : ASTNode {};
 
 struct StringExpr : Expr {
     std::string value;
-    explicit StringExpr(const std::string& val) : value(val) {}
+    explicit StringExpr(const std::string& v) : value(v) {}
+};
+
+struct VariableExpr : Expr {
+    std::string name;
+    explicit VariableExpr(const std::string& n) : name(n) {}
 };
 
 // ===== Statements =====
@@ -25,7 +29,15 @@ struct PrintStmt : Stmt {
         : expression(std::move(expr)) {}
 };
 
-// ===== Program Root =====
+struct LetStmt : Stmt {
+    std::string name;
+    std::unique_ptr<Expr> initializer;
+
+    LetStmt(const std::string& n, std::unique_ptr<Expr> init)
+        : name(n), initializer(std::move(init)) {}
+};
+
+// ===== Program =====
 struct Program : ASTNode {
     std::vector<std::unique_ptr<Stmt>> statements;
 };

@@ -4,7 +4,10 @@
 
 enum class TokenType {
     PRINT,
+    LET,
+    IDENTIFIER,
     STRING,
+    EQUAL,
     EOF_TOKEN,
     UNKNOWN
 };
@@ -17,7 +20,6 @@ struct Token {
 class Lexer {
 public:
     explicit Lexer(const std::string& source);
-
     std::vector<Token> tokenize();
 
 private:
